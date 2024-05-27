@@ -27,39 +27,22 @@ model User {
 }
 
 model Product {
-  id          String              @id
+  id          String     @id
   name        String
   author      String
-  categories  ProductOfCategory[]
+  categories  Category[]
   description String
   quantity    Float
   sold        Float
   price       Float
-  img         Images[]
+  img         String[]
   cartItem    CartItem[]
 }
 
-model Images {
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  url       String
-
-  @@id([productId])
-}
-
 model Category {
-  id       String              @id
-  name     String
-  products ProductOfCategory[]
-}
-
-model ProductOfCategory {
-  productId  String
-  product    Product  @relation(fields: [productId], references: [id])
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  @@id([productId, categoryId])
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
 model Order {
@@ -73,6 +56,7 @@ model Order {
 }
 
 model CartItem {
+  id        Int     @id @default(autoincrement())
   userId    String
   user      User    @relation(fields: [userId], references: [id])
   orderId   String
@@ -81,6 +65,4 @@ model CartItem {
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   amount    Float
-
-  @@id([userId, orderId])
 }
