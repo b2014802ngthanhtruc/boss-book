@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id          String      @id
+    username    String
+    password    String
+    email       String      @unique
+    phone       String
+    address     String
+    is_admin    Boolean
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    cartItem    CartItem[]
+}
+
+model Product {
+  id            String    @id
+  name          String
+  author        String
+  categories    ProductOfCategory[]
+  description   String
+  quantity      Float
+  sold          Float
+  price         Float
+  img           Images[]
+  cartItem      CartItem[]
+
+}
+
+model Images {
+  productId     String    
+  product       Product   @relation(fields: [productId],references: [id])
+  url           String
+  @@id([productId])
+}
+
+model Category {
+  id            String    @id
+  name          String
+  products      ProductOfCategory[]
+}
+
+model ProductOfCategory {
+  productId     String
+  product       Product   @relation(fields: [productId],references: [id])
+  categoryId    String
+  category      Category  @relation(fields: [categoryId],references: [id])
+  
+  @@id([productId,categoryId])
+}
+
+model Order {
+  id            String    @id
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
+  payMethod     String
+  shipMethod    String
+  detail        CartItem[]
+  userId        String
+}
+
+model CartItem {
+  userId        String    
+  user          User      @relation(fields: [userId],references: [id])
+  orderId       String    
+  order         Order     @relation(fields: [orderId],references: [id])
+  productId     String
+  product       Product   @relation(fields: [productId],references: [id])
+  quantity      Int
+  amount        Float
+
+  @@id([userId,orderId])
+}
