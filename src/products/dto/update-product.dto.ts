@@ -1,14 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { PartialType } from '@nestjs/swagger';
-import { CreateProductDto } from './create-product.dto';
+import { CreateProductZ } from "./create-product.dto";
+import { createZodDto } from "@anatine/zod-nestjs";
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {
-  id: string;
-  name: string;
-  author: string;
-  description: string;
-  quantity: number;
-  sold: number;
-  price: number;
-  img: string[];
-}
+export const UpdateProductZ = CreateProductZ;
+
+export class UpdateProductDto extends createZodDto(
+  UpdateProductZ.omit({ id: true }),
+) {}

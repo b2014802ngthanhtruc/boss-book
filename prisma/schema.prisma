@@ -15,11 +15,11 @@ datasource db {
 
 model User {
   id         String     @id
-  username   String
+  username   String?
   password   String
   email      String     @unique
-  phone      String
-  address    String
+  phone      String?
+  address    String?
   is_admin   Boolean
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
@@ -27,10 +27,10 @@ model User {
 }
 
 model Product {
-  id          String     @id
+  id          String              @id
   name        String
   author      String
-  categories  Category[]
+  categories  ProductOfCategory[]
   description String
   quantity    Float
   sold        Float
@@ -40,9 +40,17 @@ model Product {
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  products Product[]
+  id       Int                 @id @default(autoincrement())
+  name     String              @unique
+  products ProductOfCategory[]
+}
+
+model ProductOfCategory {
+  id         Int      @id @default(autoincrement())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Order {

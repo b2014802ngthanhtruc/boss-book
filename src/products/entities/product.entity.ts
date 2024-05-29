@@ -1,6 +1,5 @@
-import { Product } from '@prisma/client';
-import { CategoryEntity } from 'src/categories/entities/category.entity';
-//import { CategoryEntity } from 'src/categories/entities/category.entity';
+import { Product } from "@prisma/client";
+import { CategoryEntity } from "src/categories/entities/category.entity";
 
 export class ProductEntity implements Product {
   id: string;
